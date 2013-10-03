@@ -30,6 +30,12 @@ span, input {
 	display: block;
 }
 
+input {
+	padding: 2px 2px;
+	font-size: 15px;
+	margin-bottom: 10px;
+}
+
 img {
 	display: inline-block;
 }
@@ -77,10 +83,13 @@ img {
     height: 500px;
     margin: 0 auto;
     background: $templateBackground;
-    overflow-y: scroll;
     border: 1px solid #919799;
 	border-radius: 2px;
 	position: relative;
+}
+
+.overflow {
+    overflow-y: scroll;
 }
 
 .table-view {
@@ -131,6 +140,7 @@ img {
 	margin-top: 10px;
 	text-align: center;
 	line-height: 40px;
+	cursor: pointer;
 	display: inline-block;
 	border-radius: 4px;
 	background: linear-gradient(to bottom, #D5D5D5 0%, #b4c0c4 100%);
@@ -140,8 +150,19 @@ img {
 	}
 }
 
+.extra-top-margin {
+	margin-top: 20px;
+}
+
 .template-buttons {
 	margin-top: 10px;
+}
+
+.absolute {
+	position: absolute;
+	bottom: -70px;
+	left: 0px;
+	width: 725px;
 }
 
 .cycle-buttons {

@@ -10,50 +10,77 @@ AppRouter = Backbone.Router.extend({
 
 	initialize: function() {
 		this.students = new StudentCollection();
-		this.students.listenTo(this.students, 'add', function(student) {
-			new StudentTableView({model: student})
-		});
-		this.students.add(data);
-		this.students.stopListening();
-
-		this.students.listenTo(this.students, 'add', function(student) {
-			new AddStudentView({model: student});
-		});
 	},
 
 	routes: {
-		'students'          : 'showStudents',
-		'students/:id'      : 'showStudent',
-		'add'               : 'addStudent',
-		'students/edit/:id' : 'editStudent'
+		''         : 'showStudents',
+		'add'      : 'addStudent',
+		':id/edit' : 'editStudent',
+		':id'      : 'showStudent'
 	},
 
 	showStudents: function() {
 		$('.container').html('');
 		$('.container').append(this.tableTemplate());
-		this.students.each(function(student) {
-			new StudentTableView({model: student})
-		})
+
+		this.fetchCollection(display);
+
+		function display(students) {
+			students.each(function(student) {
+				new StudentTableView({model: student})
+			})
+		}
 	},
 
 	showStudent: function(id) {
-		$('.container').html('');
-		var showThisStudent = this.students.get(id);
-		$('.container').append(this.fullTemplate({user: showThisStudent}));
-		new StudentFullView({model: showThisStudent});
+		var that = this
+
+		this.fetchCollection(display);
+
+		function display(students) {			
+			var showThisStudent = students.get(id);
+			$('.container').html('');
+			$('.container').append(that.fullTemplate({student: showThisStudent}));
+			new StudentFullView({model: showThisStudent});
+		}
 	},
 
 	addStudent: function() {
-		$('.container').html('');
-		$('.container').append(this.addTemplate());
-		this.students.add({});
+		var that = this
+
+		this.fetchCollection(display);
+
+		function display(students){		
+			$('.container').html('');
+			$('.container').append(that.addTemplate());
+			students.listenToOnce(students, 'add', function(student) {
+				new AddStudentView({model: student});
+			});
+			students.add({});
+		}
 	},
 
 	editStudent: function(id) {
-		$('.container').html('');
-		var editThisStudent = this.students.get(id);
-		$('.container').append(this.editTemplate({user: editThisStudent}));
-		new EditStudentView({model: editThisStudent});
+		var that = this
+
+		this.fetchCollection(display);
+
+		function display(students) {			
+			$('.container').html('');
+			var editThisStudent = students.get(id);
+			$('.container').append(that.editTemplate({student: editThisStudent}));
+			new EditStudentView({model: editThisStudent});
+		}
+	},
+
+	fetchCollection: function(display) {
+		if (this.students.length === 0) {	
+	    	this.students.fetch({
+				success: function(students) {
+					display(students);
+				}
+			})
+		}  else {display(this.students)};
 	}
 })
 
