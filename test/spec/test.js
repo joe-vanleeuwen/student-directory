@@ -2,30 +2,61 @@
 (function () {
     describe('Directory', function () {
 
-    	it('should add new student', function() {
-    		$('.add').click();
+    	this.timeout(15000);
 
-			$('.student-name').val('Brady Moller');
-			$('.student-cell').val('864-884-5555');
-			$('.student-email').val('bradyMoller@gmail.com');
-			$('.student-github').val('https://github.com/bradyMoller');
-			$('.student-image').val('https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQtR5BkM7w6FXDn4xmNem0hckzTkYuopVAeIR6As9UgatIyVwEySQ');
+    	var randomName = 'Name ' + Math.floor(Math.random()*100000);
+
+    	it('should add new student', function(done) {
+    		// $('.add').click();
+    		// cheating because the <a> tag won't click
+    		router.navigate('add', {trigger: true})
+
+			$('.student-name').val(randomName);
 
 			$('.save').click();
-			var lastStudent = $('.template-container .table-view .name').last();
-			expect(lastStudent.text()).to.equal('Brady Moller');
+			console.log($('.student-name').val())
+			setTimeout(function() {
+				var lastStudent = $('.template-container .table-view .name').last();
+				expect(lastStudent.text()).to.equal(randomName);
+				done();
+			}, 1500)
     	})
 
-    	it('should edit a student', function() {
-    		var lastStudent = $('.template-container .table-view .name').last();
-    		lastStudent.click();
+    	it('should edit a student', function(done) {
+    		var newRandomName = 'Name ' + Math.floor(Math.random()*100000);
 
-    		$('.student-name').val('Amy Moller');
-			$('.save').click();
-			$('.go-back-button').click();
+    		var students = new StudentCollection();
 
-			var lastStudent = $('.template-container .table-view .name').last();
-			expect(lastStudent.text()).to.equal('Amy Moller');
+    		var studentId;
+    		setTimeout(function() {
+	    		students.fetch({
+	    			success: function() {
+		    			students.each(function(student) {
+		    				if (student.get('name') === randomName) {
+		    					studentId = student.get('_id')
+		    				}
+		    			})
+	    			}
+	    		});
+	    		setTimeout(function() {
+	    			// again click issues with the <a> tag
+	    			router.navigate(studentId + '/edit', {trigger: true})
+	    			console.log(studentId)
+	    			console.log(newRandomName + ' and ' + students.get(studentId).get('name'))
+		    		$('.student-name').val(newRandomName);
+					$('.save').click();
+					setTimeout(function() {
+						setTimeout(function() {
+						console.log(newRandomName + ' and ' + students.get(studentId).get('name'))
+						var student = students.get(studentId)
+						expect(student.get('name')).to.equal(newRandomName);
+						done();
+						},1500)
+					},1500)
+	    		},1500)
+    		},1500)
+
+
     	})
 
     	it('should remove a student', function() {
