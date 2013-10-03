@@ -10,7 +10,7 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-        <link rel="stylesheet" href="styles/16e0d3d5.main.css">
+        <link rel="stylesheet" href="styles/e23d7055.main.css">
     </head>
     <body>
         <!--[if lt IE 10]>
@@ -18,113 +18,95 @@
         <![endif]-->
 
         <div class="container"></div>
-<!--             <h1 class="title">Student Directory</h1>
-            <div class="template-container">
-                <div class="box-shadow"></div>
-            </div> -->
-<!--             <a class="see-previous slider-button"><div class="slider-button">&#171;</div></a>
-            <a class="see-next slider-button"><div class="slider-button">&#187;</div></a>
-            <a href="#/students" class="go-back-button a-button">Go Back</a>
-            
-            <a href="#/students/edit/<%= user.get('id') %>" class="edit a-button">EDIT</a> -->
-<!--             <a href="#/add"><div class="add on-right a-button">Add</div></a>
-        </div> -->
 
         <!-- table template -->
         <script type="text/template" id="table-template">
             <h1 class="title">Student Directory</h1>
-            <div class="template-container"></div>
-            <a href="#/add" class="add on-right a-button">Add</a>
+            <div class="template-container overflow"></div>
+            <a href="#add" class="add on-right extra-top-margin a-button">Add</a>
         </script>
 
         <!-- full template -->
         <script type="text/template" id="full-template">
-            <h1 class="title"><%= user.get('name') %></h1>
+            <h1 class="title"><%= student.get('name') %></h1>
             <div class="template-container"></div>
             <div class="template-buttons">
-                <a href="#/students" class="go-back-button a-button">Directory</a>
+                <a href="#" class="go-back-button a-button">Directory</a>
                 <div class="cycle-buttons">
                     <a class="see-previous cycle-button">&#171;</a>
                     <a class="see-next cycle-button">&#187;</a>
                 </div>
-                <a href="#/students/edit/<%= user.get('id') %>" class="edit on-right a-button">Edit</a>
+                <a href="#<%= student.get('_id') %>/edit" class="edit on-right a-button">Edit</a>
             </div>
         </script>
 
         <!-- edit template -->
         <script type="text/template" id="edit-template">
-            <h1 class="title"><%= user.get('name') %></h1>
+            <h1 class="title"><%= student.get('name') %></h1>
             <div class="template-container"></div>
-            <div class="template-buttons">
-                <a href="#/students" class="remove a-button">Remove</a>
-                <a href="#/students/<%= user.get('id') %>" class="save on-right a-button">Save</a>
-                <a href="#/students/<%= user.get('id') %>" class="cancel on-right a-button">Cancel</a>
-            </div>
         </script>
 
         <!-- add template -->
         <script type="text/template" id="add-template">
             <h1 class="title">New Student</h1>
             <div class="template-container"></div>
-            <div class="template-buttons">
-                <a href="#/students" class="cancel a-button">Cancel</a>
-                <a href="#/students" class="save on-right a-button">Save</a>
-            </div>
         </script>
 
         <!-- table view -->
         <script type="text/template" id="table-view">
-            <div class="picture"><a href="#students/<%= user.get('id') %>"><img src="<%= user.get('image') %>" class="thumbnail-photo"></a></div>
-            <div class="name"><a href="#students/<%= user.get('id') %>"><%= user.get('name') %></a></div>
-            <div class="github"><a href="<%= user.get('github') %>"><%= user.get('github') %></a></div>
+            <div class="picture"><a href="#<%= student.get('_id') %>"><img src="<%= student.get('image') %>" class="thumbnail-photo"></a></div>
+            <div class="name"><a href="#<%= student.get('_id') %>"><%= student.get('name') %></a></div>
+            <div class="github"><a href="<%= student.get('github') %>"><%= student.get('github') %></a></div>
         </script>
 
         <!-- full view -->
         <script type="text/template" id="full-view">
             <div class="info-background">
-                <img src="<%= user.get('image') %>" class="full-photo">
+                <img src="<%= student.get('image') %>" class="full-photo">
                 <div class="info">
                     <p><strong>Cell:</strong></p>
-                    <span><%= user.get('cell') %></span>
+                    <span><%= student.get('cell') %></span>
                     <p><strong>Email:</strong></p>
-                    <span><%= user.get('email') %></span>
+                    <span><%= student.get('email') %></span>
                     <p><strong>Github:</strong></p>
-                    <span><%= user.get('github') %></span>
+                    <span><%= student.get('github') %></span>
                 </div>
             </div>
         </script>
 
-        <!-- add view -->
-        <script type="text/template" id="add-view">
+        <!-- add or edit view -->
+        <script type="text/template" id="add-or-edit-view">
             <div class="info-background">
-                <span>Name:</span>
-                <input class="student-name" placeholder="name">
-                <span>Cell:</span>
-                <input class="student-cell" placeholder="cell">
-                <span>Email:</span>
-                <input class="student-email" placeholder="email">
-                <span>Github:</span>
-                <input class="student-github" placeholder="github">
-                <span>Image:</span>
-                <input class="student-image" placeholder="url">
-            </div>
-        </script>
-
-        <!-- edit view -->
-        <script type="text/template" id="edit-view">
-            <div class="info-background">
-                <img src="<%= user.get('image') %>" class="full-photo">
+                <img src="<%= student.get('image') %>" class="full-photo">
                 <div class="info">
                     <span>Name:</span>
-                    <input class="student-name" placeholder="name" value="<%= user.get('name') %>">
+                    <input class="student-name" placeholder="name" value="<%= student.get('name') %>">
                     <span>Cell:</span>
-                    <input class="student-cell" placeholder="cell" value="<%= user.get('cell') %>">
+                    <input class="student-cell" placeholder="cell" value="<%= student.get('cell') %>">
                     <span>Email:</span>
-                    <input class="student-email" placeholder="email" value="<%= user.get('email') %>">
+                    <input class="student-email" placeholder="email" value="<%= student.get('email') %>">
                     <span>Github:</span>
-                    <input class="student-github" placeholder="github" value="<%= user.get('github') %>">
+                    <input class="student-github" placeholder="github" value="<%= student.get('github') %>">
                 </div>
-                <input class="student-image" placeholder="url" value="<%= user.get('image') %>">
+                <input class="student-image" placeholder="url" value="<%= student.get('image') %>">
+                <%= buttonsTemplate({student: student}) %>
+            </div>
+        </script>
+
+        <!-- add buttons -->
+        <script type="text/template" id="add-buttons">
+            <div class="template-buttons absolute">
+                <a href="#" class="cancel a-button">Cancel</a>
+                <div class="save on-right a-button">Save</div>
+            </div>
+        </script>
+
+        <!-- edit buttons -->
+        <script type="text/template" id="edit-buttons">
+            <div class="template-buttons absolute">
+                <div class="remove a-button">Remove</div>
+                <a href="#<%= student.get('_id') %>" class="save on-right a-button">Save</a>
+                <a href="#<%= student.get('_id') %>" class="cancel on-right a-button">Cancel</a>
             </div>
         </script>
 
@@ -141,8 +123,8 @@
             ga('create','UA-XXXXX-X');ga('send','pageview');
         </script>
 
-        <script src="scripts/1dbd59e2.main.js"></script>
+        <script src="scripts/3b33f309.main.js"></script>
 
-        <script src="scripts/3431b5a9.coffee.js"></script>
+        <script src="scripts/d5d180ab.coffee.js"></script>
 </body>
 </html>
