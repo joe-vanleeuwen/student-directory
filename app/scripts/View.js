@@ -126,7 +126,7 @@ EditStudentView = Backbone.View.extend({
 
 	events: {
 		'click .save': 'save',
-		'click .remove': 'doNotSave'
+		'click .remove': 'delete'
 	},
 
 	initialize: function() {
@@ -154,7 +154,7 @@ EditStudentView = Backbone.View.extend({
 		this.model.save();
 	},
 
-	doNotSave: function() {
+	delete: function() {
 		this.model.destroy({
 			success: function() {
 				router.navigate("", {trigger: true});

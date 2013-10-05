@@ -5,29 +5,33 @@
     	this.timeout(15000);
 
     	var randomName = 'Name ' + Math.floor(Math.random()*100000);
+    	var newRandomName = 'Name ' + Math.floor(Math.random()*100000);
+		var students = new StudentCollection();
+		var studentId;
 
     	it('should add new student', function(done) {
     		// $('.add').click();
     		// cheating because the <a> tag won't click
-    		router.navigate('add', {trigger: true})
+    		setTimeout(function() {
+	    		router.navigate('', {trigger: true})
 
-			$('.student-name').val(randomName);
+				setTimeout(function() {
+	    			router.navigate('add', {trigger: true})
+					$('.student-name').val(randomName);
 
-			$('.save').click();
-			console.log($('.student-name').val())
-			setTimeout(function() {
-				var lastStudent = $('.template-container .table-view .name').last();
-				expect(lastStudent.text()).to.equal(randomName);
-				done();
+					$('.save').click();
+					setTimeout(function() {
+						var lastStudent = $('.template-container .table-view .name').last();
+						expect(lastStudent.text()).to.equal(randomName);
+						done();
+					}, 1500)
+				}, 1500)
 			}, 1500)
     	})
 
     	it('should edit a student', function(done) {
-    		var newRandomName = 'Name ' + Math.floor(Math.random()*100000);
+    		console.log(newRandomName)
 
-    		var students = new StudentCollection();
-
-    		var studentId;
     		setTimeout(function() {
 	    		students.fetch({
 	    			success: function() {
@@ -41,17 +45,16 @@
 	    		setTimeout(function() {
 	    			// again click issues with the <a> tag
 	    			router.navigate(studentId + '/edit', {trigger: true})
-	    			console.log(studentId)
-	    			console.log(newRandomName + ' and ' + students.get(studentId).get('name'))
 		    		$('.student-name').val(newRandomName);
 					$('.save').click();
 					setTimeout(function() {
-						setTimeout(function() {
-						console.log(newRandomName + ' and ' + students.get(studentId).get('name'))
-						var student = students.get(studentId)
-						expect(student.get('name')).to.equal(newRandomName);
-						done();
-						},1500)
+						students.fetch({
+							success: function() {
+								var student = students.get(studentId)
+								expect(student.get('name')).to.equal(newRandomName);
+								done();
+	    					}
+	    				});
 					},1500)
 	    		},1500)
     		},1500)
@@ -59,14 +62,48 @@
 
     	})
 
-    	it('should remove a student', function() {
-    		var lastStudent = $('.template-container .table-view .name').last();
-    		lastStudent.click();
+    	it('should remove a student', function(done) {
+    		router.navigate('', {trigger: true})
+
+    		var studentExists = false;
+    		// var clickThisStudent;
+
+    		// more <a> tag click issues
+
+	 		// var names = $('.template-container .table-view .name a')
+	 		// names.each(function(name) {
+			// 	if($(names[name]).text() === newRandomName) {
+			// 		clickThisStudent = $(names[name]);
+			// 		console.log($(names[name]).text())
+			// 	}	
+			// })
+			// clickThisStudent.click()
+
+    		// cheating . .
+    		router.navigate(studentId, {trigger: true})
+
+			// $('.edit').click();
+
+			// cheating . . again . .
+			router.navigate(studentId + '/edit', {trigger: true})
 
 			$('.remove').click();
 
-			var lastStudent = $('.template-container .table-view .name').last();
-			expect(lastStudent.text()).to.not.equal('Amy Moller');
+			setTimeout(function(){
+				students.fetch({
+					success: function(students) {
+						setTimeout(function(){
+							students.each(function(student) {
+								if(studentId === student.get('_id')) {
+									studentExists = true;
+								}	
+							})		
+							expect(studentExists).to.equal(false);
+							done();
+						},1500)			
+					}
+				})
+			},1500)
     	})
     });
 })();

@@ -20,12 +20,13 @@ AppRouter = Backbone.Router.extend({
 	},
 
 	showStudents: function() {
-		$('.container').html('');
-		$('.container').append(this.tableTemplate());
+		var that = this
 
 		this.fetchCollection(display);
 
 		function display(students) {
+			$('.container').append(that.tableTemplate());
+			console.log(students.length)
 			students.each(function(student) {
 				new StudentTableView({model: student})
 			})
@@ -39,7 +40,6 @@ AppRouter = Backbone.Router.extend({
 
 		function display(students) {			
 			var showThisStudent = students.get(id);
-			$('.container').html('');
 			$('.container').append(that.fullTemplate({student: showThisStudent}));
 			new StudentFullView({model: showThisStudent});
 		}
@@ -51,7 +51,6 @@ AppRouter = Backbone.Router.extend({
 		this.fetchCollection(display);
 
 		function display(students){		
-			$('.container').html('');
 			$('.container').append(that.addTemplate());
 			students.listenToOnce(students, 'add', function(student) {
 				new AddStudentView({model: student});
@@ -65,8 +64,7 @@ AppRouter = Backbone.Router.extend({
 
 		this.fetchCollection(display);
 
-		function display(students) {			
-			$('.container').html('');
+		function display(students) {		
 			var editThisStudent = students.get(id);
 			$('.container').append(that.editTemplate({student: editThisStudent}));
 			new EditStudentView({model: editThisStudent});
@@ -74,6 +72,7 @@ AppRouter = Backbone.Router.extend({
 	},
 
 	fetchCollection: function(display) {
+		$('.container').html('');
 		if (this.students.length === 0) {	
 	    	this.students.fetch({
 				success: function(students) {
