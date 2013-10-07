@@ -52,10 +52,7 @@ AppRouter = Backbone.Router.extend({
 
 		function display(students){		
 			$('.container').append(that.addTemplate());
-			students.listenToOnce(students, 'add', function(student) {
-				new AddStudentView({model: student});
-			});
-			students.add({});
+			new AddStudentView();
 		}
 	},
 

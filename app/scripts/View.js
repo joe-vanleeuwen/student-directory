@@ -83,6 +83,7 @@ AddStudentView = Backbone.View.extend({
 	},
 
 	initialize: function() {
+		this.model = new Student();
 		$('.template-container').html('');
 		$('.template-container').append(this.$el)
 		this.render();
@@ -98,7 +99,9 @@ AddStudentView = Backbone.View.extend({
 		);
 	},
 
-	save: function() {	
+	save: function() {
+		router.students.add(this.model)
+
 		if ($('.student-name').val() === '') {
 			this.model.set('name', '?');
 		} else {this.model.set('name', $('.student-name').val())}
@@ -116,7 +119,7 @@ AddStudentView = Backbone.View.extend({
 	},
 
 	cancel: function() {
-		this.model.collection.remove(this.model)
+		this.model.destroy();
 	}
 })
 
